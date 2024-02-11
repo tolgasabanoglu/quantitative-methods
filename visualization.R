@@ -64,10 +64,3 @@ ggplot(airquality_tidy, aes(x = ID, y = measurements, col= type_of_measurement))
 
 
 ```
-
-
-                                                
-```
-
-
-```
