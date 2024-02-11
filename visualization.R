@@ -65,56 +65,7 @@ ggplot(airquality_tidy, aes(x = ID, y = measurements, col= type_of_measurement))
 
 ```
 
-### 3. Tree rings (4 points)
 
-Import the dataset 'treering.csv'. Columns  1 to 56 contain dendrochronological time series of 56 tree cores (annual growth = tree ring widths in mm). Column 57 contains the year associated with the annual tree rings. The dendrochronological time series are of different length, e.g. not all years are observed in each tree core. The column names are the names (ids) of the tree cores.
-
-In Moodle, you'll find an example plot 'treering_example.pdf' showing time series of tree ring widths for each tree core. Create a plot that shows the exact same relationships. Hint: Use the `gather()` function to convert the dataset into the appropriate format!
-
-**NOTE:** In markdown it might be necessary to index the namespace of some functions. In prticular, `dplyr::select()` and `dplyr::filter()` might fail knitting if the namespace is not defined.
-
-```{r}
-
-library(dplyr)
-
-treering <- read.csv("~/Downloads/data 2/treering.csv", sep = ",", dec = ".", header = TRUE)
-
-treering_gat <- gather(treering,  na.rm = T, key = "Plots", "Increment", c(-Year))
-
-treering_plot <- treering_gat %>%
-  mutate(Subplot = case_when(
-    endsWith(Plots, "A") ~ "A",
-    endsWith(Plots, "B") ~ "B"
-    ))
-
-ggplot(treering_plot, aes(x=Year, y=Increment, col= Subplot)) +
-  geom_line()
-
-
-```
-
-Following, calculate the mean and standard deviation of increment for each dendrochronological time series. Hint: Use a combination of `group_by()` and `summarize()` available through the **dplyr** package. Prove your solution by showing the first 5 rows of the summary dataset!
-
-```{r}
-
-treering_group <- treering_gat %>% group_by(Increment, Year)
-treering_summarise <- treering_group %>% summarise(
-  Inc_mean = mean(Increment, na.rm = TRUE),
-  Inc_sd = sd(Increment, na.rm = TRUE),
-)
-  
-treering_summarise[1:5, ]        
-
-```
-
-Which plot has the highest/lowest increment?
-
-```{r}
-
-treering_gat %>% group_by(Plots) %>% 
-  summarise(max = max(Increment),
-            min = min(Increment)
-  )
                                                 
 ```
 
